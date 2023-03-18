@@ -30,8 +30,15 @@
         },
         methods: {
             async fetch() {
-                const response = await axios.get("https://fakestoreapi.com/products");
-                this.products = response.data;
+                try {
+                    const response = await axios.get("https://fakestoreapi.com/products");
+                    this.products = response.data;
+                    console.log(this.products);
+                } catch(error) {
+                    alert("Erro, tente novamente mais tarde!");
+                    console.log(error);
+                }
+                
             }
         }
     }

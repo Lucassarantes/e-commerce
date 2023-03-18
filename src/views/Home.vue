@@ -21,7 +21,7 @@
             }
         },
         created() {
-            this.getProducts();
+            //this.getProducts();
         },
         methods: {
             // getProducts() {

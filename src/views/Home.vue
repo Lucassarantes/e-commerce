@@ -1,7 +1,7 @@
 <template>
     <section id="destaques" class="grid grid-cols-3">
         <div class="w-full h-96 shadow-lg">
-            <img :src="this.imagem()" alt="">
+            <!-- <img :src="this.imagem()" alt=""> -->
         </div>
         <div class="w-full">
             

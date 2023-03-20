@@ -5,7 +5,7 @@
     <div v-show="!this.isLoading" class="grid grid-cols-1 md:grid-cols-3  gap-2 mt-10">
         <div v-for="item in this.products" :key="item.id" class="shadow-lg rounded-lg border-2 flex">
             <div class="grid grid-cols-1 rounded-lg text-white">
-                <img class="w-fit max-h-40 rounded-lg shadow-lg" :src="item.images[0]" :alt="item.name">
+                <img class="w-fitrounded-lg shadow-lg" :src="item.images[0]" :alt="item.name">
                 <div class="text-left text-green-700 mt-2">
                     <p class="font-bold">{{item.title}}</p>
                     <p class="font-bold text-left mb-5">{{this.formatMoney(item.price, "BRL")}}</p>
@@ -31,18 +31,20 @@
             LoadingScreen
         },
         async created() {
-            await this.fetch();
+            await this.fetchProducts();
         },
         methods: {
-            async fetch() {
-                    await axios.get("https://dummyjson.com/products")
+            async fetchProducts() {
+                    await axios.get("https://dummyjson.com/products/category/automotive")
                         .then(response => {
                             this.products = response.data.products;
+                            console.log(this.products);
                             this.isLoading = false;
-                        }).catch(error => {
+                        })
+                        .catch(error => {
                             alert("Erro, tente novamente mais tarde!");
                             console.log(error);
-                        })
+                        });  
                 
             },
             formatMoney(value, currency) {

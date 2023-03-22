@@ -32,14 +32,14 @@
 import LoadingScreen from "../components/LoadingScreen.vue";
 import { useProdutosStore } from '@/store';
 import { storeToRefs } from 'pinia';
-import { ref } from "vue";
+// import { ref } from "vue";
 
 const store = useProdutosStore();
 const { produtos } = storeToRefs(store);
 const { carregaDados } = store;
 
 let images = [];
-const quantidade = ref(0);
+// const quantidade = ref(0);
 
 carregaDados()
     .then(()=> {

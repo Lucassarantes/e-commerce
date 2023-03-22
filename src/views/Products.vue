@@ -1,59 +1,71 @@
 <template>
-    <div v-show="isLoading" class="w-full h-[50vw] flex justify-center items-center">
+    <div v-show="produtos.length === 0" class="w-full h-[50vw] flex justify-center items-center">
         <LoadingScreen />
     </div>
-    <div v-show="!this.isLoading" class="grid grid-cols-1 md:grid-cols-3  gap-2 mt-10">
-        <div v-for="item in this.products" :key="item.id" class="shadow-lg rounded-lg border-2 flex">
+    <div v-show="produtos.length > 0" class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10 mx-10 mb-10">
+        <div v-for="produto in produtos" :key="produto.id" class="shadow-lg rounded-lg border-2 flex">
             <div class="grid grid-cols-1 rounded-lg text-white">
-                <img class="w-fitrounded-lg shadow-lg" :src="item.images[0]" :alt="item.name">
-                <div class="text-left text-green-700 mt-2">
-                    <p class="font-bold">{{item.title}}</p>
-                    <p class="font-bold text-left mb-5">{{this.formatMoney(item.price, "BRL")}}</p>
-                    <p class="text-left">{{item.description}}</p>
+                <div class="max-h-80 flex justify-center rounded-lg border-b-4 border-green-800">
+                    <img class="max-h-80" :src="produto.thumbnail" :alt="produto.name">
+                </div>
+                <div class="flex justify-center flex-wrap text-green-800 mt-2 px-5">
+                    <p class="font-bold text-sm text-center my-3">{{produto.title}}</p>
+                    <p class="text-left text-sm">{{produto.description}}</p>
+                    <h4 class="font-semibold my-5 w-full">DE: <span class="line-through text-gray-500 bg-red-200 p-2 rounded-lg mr-5">{{ formataModeda(produto.price + produto.price * 0.2) }}</span>POR: <span class="text-black no-line-through bg-green-300 p-2 rounded-lg"> {{ formataModeda(produto.price) }}</span></h4>
+                    <!-- <div class="w-full grid grid-cols-2 justify-end mb-5"> -->
+                        <!-- <div class="flex justify-center"> -->
+                            <!-- <button class="bg-red-500 rounded-lg p-3" @click="diminuirUm()"><img class="w-full" src="@/assets/icon-minus.svg" alt="remover um item" /></button>
+                            <span class="p-3 font-semibold">{{ quantidade }}</span>
+                            <button class="bg-green-800 rounded-lg p-3" @click="adicionarUm()"><img class="w-full" src="@/assets/icon-plus.svg" alt="" /></button> -->
+                        <!-- </div> -->
+                        <div class="flex justify-center mb-5">
+                            <button class="bg-green-800 font-bold text-sm text-white p-3 rounded-lg">Adicionar ao carrinho</button>
+                        </div>
+                    <!-- </div> -->
                 </div>
             </div>
         </div>
     </div>
 </template>
 
-<script>
-    import axios from "axios";
-    import LoadingScreen from "../components/LoadingScreen.vue";
+<script setup>
+import LoadingScreen from "../components/LoadingScreen.vue";
+import { useProdutosStore } from '@/store';
+import { storeToRefs } from 'pinia';
+import { ref } from "vue";
 
-    export default {
-        data() {
-            return {
-                products: null,
-                isLoading: true,
-            }
-        },
-        components: {
-            LoadingScreen
-        },
-        async created() {
-            await this.fetchProducts();
-        },
-        methods: {
-            async fetchProducts() {
-                    await axios.get("https://dummyjson.com/products/category/automotive")
-                        .then(response => {
-                            this.products = response.data.products;
-                            console.log(this.products);
-                            this.isLoading = false;
-                        })
-                        .catch(error => {
-                            alert("Erro, tente novamente mais tarde!");
-                            console.log(error);
-                        });  
-                
-            },
-            formatMoney(value, currency) {
-                return new Intl.NumberFormat('pt-BR', {
-                    style: 'currency',
-                    currency: currency
-                }).format(value);
-            }
+const store = useProdutosStore();
+const { produtos } = storeToRefs(store);
+const { carregaDados } = store;
+
+let images = [];
+const quantidade = ref(0);
+
+carregaDados()
+    .then(()=> {
+        produtos.value.forEach(produto => {
+            images.push(produto.thumbnail);
+        });
+    });
+    
+const formataModeda = (valor) => {
+    return Intl.NumberFormat(
+        "pt-BR",
+        {
+            style: "currency",
+            currency: "BRL"
         }
-    }
+    ).format(valor);
+};
+
+// const diminuirUm = () => {
+//     if (quantidade.value > 0) {
+//         quantidade.value--;
+//     }
+// };
+
+// const adicionarUm = () => {
+//     quantidade.value++;
+// };
 
 </script>

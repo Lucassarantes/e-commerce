@@ -12,7 +12,7 @@ const routes = [
     {
         path: "/products",
         name: "Products",
-        component: Products// route level code-splitting
+        component: Products
     }
 ];
 

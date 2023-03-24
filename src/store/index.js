@@ -7,28 +7,40 @@ export const useProdutosStore = defineStore("produtosStore", {
     }),
     actions: {
         async carregaDados() {
-            await axios.get("https://dummyjson.com/products/category/automotive")
-                .then(response => {
-                    let preProdutos = response.data.products;
-                    this.produtos = preProdutos.map(produto => ({
-                        ...produto,
-                        quantidade: 0,
-                    }));
-                    console.log(this.produtos);
-                })
-                .catch(err => {
-                    return "Erro ao carregar produtos da API"+err;
-                });
+            if(this.produtos.length === 0) {
+                await axios.get("https://dummyjson.com/products/category/automotive")
+                    .then(response => {
+                        let preProdutos = response.data.products;
+                        this.produtos = preProdutos.map(produto => ({
+                            ...produto,
+                            quantidade: 0,
+                            mostrarNoCarrinho: false,
+                        }));
+                    })
+                    .catch(err => {
+                        return "Erro ao carregar produtos da API"+err;
+                    });
+            }
         },
-        adicionaUmNaQuantidade(idProduto, quantidade) {
+        adicionaUmNaQuantidade(idProduto) {
             const produto = this.produtos.findIndex(produto => produto.id === idProduto);
-            console.log(this.produtos[produto]);
-            this.produtos[produto].quantidade = quantidade;
-            console.log(this.produtos[produto]);
+            this.produtos[produto].quantidade += 1;
         },
-        removeItemCarrinho(produtoRemovido){
-            const produto = this.produtos.findIndex(produto => produto.id === produtoRemovido);
+        diminuiUmNaQuantidade(idProduto) {
+            const produto = this.produtos.findIndex(produto => produto.id === idProduto);
+            if(this.produtos[produto].quantidade > 0) {
+                this.produtos[produto].quantidade -= 1;
+            }            
+        },
+        adicionaItemCarrinho(idProduto) {
+            console.log(idProduto);
+            const produto = this.produtos.findIndex(produto => produto.id === idProduto);
+            this.produtos[produto].mostrarNoCarrinho = true;
+        },
+        removeItemCarrinho(idProduto){
+            const produto = this.produtos.findIndex(produto => produto.id === idProduto);
             this.produtos[produto].quantidade = 0;
+            this.produtos[produto].mostrarNoCarrinho = false;
         }
 
     },

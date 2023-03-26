@@ -4,6 +4,13 @@
         <div v-show="!produtosNoCarrinho.value">
             <p class="text-center pt-5">Não há itens no carrinho.</p>
         </div>
+        <div v-show="produtosNoCarrinho.value">
+            <div v-for="produto in produtosNoCarrinho.value" :key="produto.id">
+                <img :src="produto.thumbnail" alt="">
+                <p>Quantidade: {{ produto.quantidade }}</p>
+                <p>Preço unitário: {{ formataMoeda(produto.price) }} Valor total: {{ formataMoeda(produto.price * produto.quantidade) }}</p>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -28,5 +35,15 @@ produtos.value.forEach(produto => {
         console.log(produtosNoCarrinho.value);
     }
 });
+
+const formataMoeda = (valor) => {
+    return Intl.NumberFormat(
+        "pt-BR",
+        {
+            style: "currency",
+            currency: "BRL"
+        }
+    ).format(valor);
+};
 
 </script>

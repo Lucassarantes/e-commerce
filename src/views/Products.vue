@@ -11,7 +11,7 @@
                 <div class="flex justify-center flex-wrap text-green-800 mt-2 px-5">
                     <p class="font-bold text-sm text-center my-3">{{produto.title}}</p>
                     <p class="text-left text-sm">{{produto.description}}</p>
-                    <h4 class="font-semibold my-5 w-full">DE: <span class="line-through text-gray-500 bg-red-200 p-2 rounded-lg mr-5">{{ formataModeda(produto.price + produto.price * 0.2) }}</span>POR: <span class="text-black no-line-through bg-green-300 p-2 rounded-lg"> {{ formataModeda(produto.price) }}</span></h4>
+                    <h4 class="font-semibold my-5 w-full">DE: <span class="line-through text-gray-500 bg-red-200 p-2 rounded-lg mr-5">{{ formataMoeda(produto.price + produto.price * 0.2) }}</span>POR: <span class="text-black no-line-through bg-green-300 p-2 rounded-lg"> {{ formataMoeda(produto.price) }}</span></h4>
                     <div class="w-full grid grid-cols-2 justify-end mb-5">
                         <div class="flex justify-center">
                             <button class="bg-red-500 rounded-lg px-4" @click="diminuiUmNaQuantidade(produto.id)"><img class="w-full" src="@/assets/icon-minus.svg" alt="remover um item" /></button>
@@ -54,7 +54,7 @@ carregaDados()
         });
     });
     
-const formataModeda = (valor) => {
+const formataMoeda = (valor) => {
     return Intl.NumberFormat(
         "pt-BR",
         {

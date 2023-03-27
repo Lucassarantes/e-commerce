@@ -1,10 +1,12 @@
 <template>
     <div class="grid grid-cols-1 absolute top-[6rem] right-[0rem] shadow-lg w-8/12 md:w-3/12 bg-white pb-5">
         <p class="w-full font-bold border-2 border-b-green-800 text-left p-5">Carrinho</p>
-        <div v-show="!produtosNoCarrinho.value">
+        <div v-show="!this.$refs.produtosNoCarrinho">
+            {{ this.$refs.produtosNoCarrinho }}
             <p class="text-center pt-5">Não há itens no carrinho.</p>
         </div>
-        <div v-show="produtosNoCarrinho.value">
+        
+        <div>
             <div v-for="produto in produtosNoCarrinho.value" :key="produto.id">
                 <img :src="produto.thumbnail" alt="">
                 <p>Quantidade: {{ produto.quantidade }}</p>
@@ -21,13 +23,16 @@ import { ref } from "vue";
 
 let mostrar = true;
 let produtosNoCarrinho = ref([]);
+let testeProdutos = []
 const store = useProdutosStore();
 const { produtos } = storeToRefs(store);
 //console.log(produtos);
 
 
 produtos.value.forEach(produto => {
+    console.log("teste");
     if (produto.quantidade > 0) {
+        testeProdutos.push(produto);
         if (mostrar === true) {
             mostrar = false;
         }
